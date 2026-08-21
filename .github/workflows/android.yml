@@ -1,0 +1,26 @@
+name: Unity Android APK Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  buildForAndroid:
+    name: Build for Android 📱
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Unity - Builder
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: Android
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Metin2Mobile-APK
+          path: build/Android
