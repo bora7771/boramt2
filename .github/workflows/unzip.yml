@@ -1,0 +1,27 @@
+name: Unzip Files
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract Files
+        run: |
+          unzip m2server-master.zip -d .
+          unrar x AV10_to_Unity.rar .
+          rm m2server-master.zip
+          rm AV10_to_Unity.rar
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Dosyalar klasore cikarildi"
+          git push
