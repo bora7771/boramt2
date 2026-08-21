@@ -1,0 +1,28 @@
+name: Unzip Files Fix
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract Files Without Unrar
+        run: |
+          sudo apt-get update && sudo apt-get install -y unrar
+          unzip -o m2server-master.zip -d .
+          unrar x -o+ AV10_to_Unity.rar .
+          rm -f m2server-master.zip
+          rm -f AV10_to_Unity.rar
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Arsivler basariyla acildi" || exit 0
+          git push
